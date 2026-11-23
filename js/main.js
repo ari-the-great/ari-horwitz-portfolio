@@ -2,6 +2,8 @@
 (function () {
   var root = document.documentElement;
   root.classList.add('js');
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function play(v) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
 
   // ---------- dark mode ----------
   var themeBtn = document.querySelector('.theme-toggle');
@@ -105,6 +107,15 @@
     ss.querySelector('.ss-next').addEventListener('click', function () { go(i + 1); });
     if (n < 2) { ss.querySelector('.ss-prev').hidden = ss.querySelector('.ss-next').hidden = true; }
     go(0);
+    // auto-cycle, paused while hovered or focused
+    if (n > 1 && !reduceMotion) {
+      var hold = false;
+      ss.addEventListener('mouseenter', function () { hold = true; });
+      ss.addEventListener('mouseleave', function () { hold = false; });
+      ss.addEventListener('focusin', function () { hold = true; });
+      ss.addEventListener('focusout', function () { hold = false; });
+      setInterval(function () { if (!hold && !document.hidden) go(i + 1); }, 3800);
+    }
   });
 
   // ---------- click an image to see it larger ----------
@@ -138,18 +149,134 @@
     reveals.forEach(function (el) { el.classList.add('in'); });
   }
 
-  // ---------- homepage clips: only play while visible, respect reduced motion ----------
-  var clips = document.querySelectorAll('video.tile-media');
-  var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  clips.forEach(function (v) {
-    if (still) { v.removeAttribute('autoplay'); v.pause(); return; }
+  // ---------- project page videos: autoplay (muted) while on screen ----------
+  document.querySelectorAll('video.autoplay').forEach(function (v) {
+    if (reduceMotion) return;
+    var userPaused = false;
+    v.addEventListener('pause', function () { if (v.dataset.auto !== '1') userPaused = true; v.dataset.auto = ''; });
+    v.addEventListener('play', function () { userPaused = false; });
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(function (entries) {
         entries.forEach(function (en) {
-          if (en.isIntersecting) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
-          else v.pause();
+          if (en.isIntersecting) { if (!userPaused) play(v); }
+          else if (!v.paused) { v.dataset.auto = '1'; v.pause(); }
         });
-      }, { threshold: 0.2 }).observe(v);
+      }, { threshold: 0.35 }).observe(v);
+    } else { play(v); }
+  });
+
+  // ---------- homepage spotlight ----------
+  document.querySelectorAll('.spotlight').forEach(function (sp) {
+    var slides = sp.querySelectorAll('.sp-slide');
+    var items = sp.querySelectorAll('.sp-item');
+    var dur = parseInt(sp.getAttribute('data-interval'), 10) || 6500;
+    sp.style.setProperty('--sp-dur', dur + 'ms');
+    var cur = 0, visible = false, hover = false;
+
+    function setActive(n) {
+      cur = (n + slides.length) % slides.length;
+      slides.forEach(function (s, j) {
+        var on = j === cur;
+        s.classList.toggle('is-active', on);
+        s.setAttribute('aria-hidden', on ? 'false' : 'true');
+        var v = s.querySelector('video');
+        if (!v) return;
+        if (on && visible && !reduceMotion) { v.preload = 'auto'; v.currentTime = 0; play(v); }
+        else v.pause();
+      });
+      items.forEach(function (it, j) {
+        it.classList.toggle('is-active', j === cur);
+        // restart the progress bar animation
+        var bar = it.querySelector('.sp-bar i');
+        if (bar) { bar.style.animation = 'none'; void bar.offsetWidth; bar.style.animation = ''; }
+      });
+      // warm up the next clip
+      var nv = slides[(cur + 1) % slides.length].querySelector('video');
+      if (nv && nv.preload === 'none') nv.preload = 'metadata';
     }
+    function updatePause() { sp.classList.toggle('is-paused', hover || !visible || reduceMotion); }
+
+    items.forEach(function (it, j) {
+      it.addEventListener('mouseenter', function () { if (j !== cur) setActive(j); });
+      it.addEventListener('focus', function () { if (j !== cur) setActive(j); });
+      var bar = it.querySelector('.sp-bar i');
+      if (bar) bar.addEventListener('animationend', function () { if (j === cur) setActive(cur + 1); });
+    });
+    sp.addEventListener('mouseenter', function () { hover = true; updatePause(); });
+    sp.addEventListener('mouseleave', function () { hover = false; updatePause(); });
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          visible = en.isIntersecting;
+          updatePause();
+          var v = slides[cur].querySelector('video');
+          if (v) { if (visible && !reduceMotion) play(v); else v.pause(); }
+        });
+      }, { threshold: 0.25 }).observe(sp);
+    } else { visible = true; }
+    updatePause();
+    setActive(0);
+  });
+
+  // ---------- interactive exoskeleton ----------
+  document.querySelectorAll('.exo').forEach(function (exo) {
+    var fig = exo.querySelector('.exo-figure');
+    var svg = exo.querySelector('.exo-svg');
+    var tip = exo.querySelector('.exo-tip');
+    var detail = exo.querySelector('.exo-detail');
+    var emptyDetail = detail.innerHTML;
+    var parts = exo.querySelectorAll('.exo-part');
+    var keys = exo.querySelectorAll('.exo-key');
+    var pinned = null;
+
+    function content(key) {
+      var k = exo.querySelector('.exo-key[data-part="' + key + '"]');
+      return k ? k.parentElement.querySelector('template').innerHTML : '';
+    }
+    function show(key) {
+      exo.classList.add('has-active');
+      parts.forEach(function (p) { p.classList.toggle('is-active', p.dataset.part === key); });
+      keys.forEach(function (k) { k.classList.toggle('is-active', k.dataset.part === key); });
+      var p = exo.querySelector('.exo-part[data-part="' + key + '"]');
+      var html = content(key);
+      detail.innerHTML = html;
+      tip.innerHTML = html.split('</strong>')[0] + '</strong>';
+      tip.hidden = false;
+      // position the card next to the part, inside the photo
+      var box = svg.getBoundingClientRect(), fbox = fig.getBoundingClientRect();
+      var x = box.left - fbox.left + box.width * parseFloat(p.dataset.cx) / 100;
+      var y = box.top - fbox.top + box.height * parseFloat(p.dataset.cy) / 100;
+      var half = Math.min(tip.offsetWidth / 2, fbox.width * 0.45);
+      x = Math.max(half + 8, Math.min(fbox.width - half - 8, x));
+      tip.style.left = x + 'px';
+      tip.style.top = y + 'px';
+      tip.classList.toggle('below', y < fbox.height * 0.45);
+    }
+    function hide() {
+      if (pinned) { show(pinned); return; }
+      exo.classList.remove('has-active');
+      parts.forEach(function (p) { p.classList.remove('is-active'); });
+      keys.forEach(function (k) { k.classList.remove('is-active'); });
+      tip.hidden = true;
+      detail.innerHTML = emptyDetail;
+    }
+    parts.forEach(function (p) {
+      p.addEventListener('mouseenter', function () { show(p.dataset.part); });
+      p.addEventListener('mouseleave', hide);
+      p.addEventListener('focus', function () { show(p.dataset.part); });
+      p.addEventListener('blur', hide);
+      p.addEventListener('click', function (e) { e.stopPropagation(); pinned = pinned === p.dataset.part ? null : p.dataset.part; pinned ? show(pinned) : hide(); });
+      p.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); p.dispatchEvent(new Event('click')); } });
+    });
+    keys.forEach(function (k) {
+      k.addEventListener('mouseenter', function () { show(k.dataset.part); });
+      k.addEventListener('mouseleave', hide);
+      k.addEventListener('focus', function () { show(k.dataset.part); });
+      k.addEventListener('blur', hide);
+      k.addEventListener('click', function (e) { e.stopPropagation(); pinned = pinned === k.dataset.part ? null : k.dataset.part; pinned ? show(pinned) : hide(); });
+    });
+    document.addEventListener('click', function (e) { if (pinned && !e.target.closest('.exo')) { pinned = null; hide(); } });
+    window.addEventListener('resize', function () { if (pinned) show(pinned); });
   });
 })();

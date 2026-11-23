@@ -23,7 +23,7 @@
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-header">
   <div class="header-inner">
-    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">AH</span><span class="brand-text">Ari Horwitz<small>Engineering Portfolio</small></span></a>
+    <a class="brand" href="index.html"><span class="brand-text">Ari Horwitz<small>Engineering Portfolio</small></span></a>
     <nav class="nav" aria-label="Main">
     <ul class="nav-list" id="nav-list">
       <li><a class="nav-link" href="index.html">Home</a></li>
@@ -47,7 +47,23 @@
 <article class="project">
 <section class="row reveal"><div class="rt"><h2 class="ta-center"><strong>Ankle Exoskeleton</strong><br>
 <em>Device Design</em></h2></div></section>
-<section class="row reveal"><figure class="media" style="max-width:391px"><img src="images/9a4f4b_c965e397cbbb456bb349f289fd3b9f62.png" width="500" height="689" alt="image.png" loading="lazy" data-zoom></figure></section>
+<section class="row reveal"><div class="exo">
+  <div class="exo-figure">
+    <img src="images/9a4f4b_c965e397cbbb456bb349f289fd3b9f62.png" width="500" height="689" alt="Ankle exoskeleton worn on the leg, side view">
+    <svg class="exo-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="false">
+      <defs><filter id="exo-glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="0.9" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+      <polygon class="exo-part" data-part="cuff" points="41,9 79,9 83,15 82,40 70,40 44,37 41,25" style="--c:#2dd4bf" tabindex="0" role="button" aria-label="Shank Cuff" data-cx="62.9" data-cy="25.0"/><polygon class="exo-part" data-part="strut" points="78,41 83,41 80,50 74,62 68,71 63,78 57,79 59,72 65,64 71,54 76,46" style="--c:#60a5fa" tabindex="0" role="button" aria-label="Shank Strut" data-cx="70.4" data-cy="59.8"/><polygon class="exo-part" data-part="heel" points="62,73 78,73 80,80 77,88 66,90 60,84" style="--c:#f59e0b" tabindex="0" role="button" aria-label="Heel Cuff" data-cx="70.5" data-cy="81.3"/><polygon class="exo-part" data-part="toe-strut" points="32,79 58,79 60,86 52,90 36,92 30,86" style="--c:#a78bfa" tabindex="0" role="button" aria-label="Toe Strut" data-cx="44.7" data-cy="85.3"/><polygon class="exo-part" data-part="under-toe" points="18,90 58,91 60,95 20,95" style="--c:#f472b6" tabindex="0" role="button" aria-label="Under-Toe Bar" data-cx="39.0" data-cy="92.8"/><polygon class="exo-part" data-part="hammock" points="9,82 20,77 31,76 33,88 24,94 10,91" style="--c:#34d399" tabindex="0" role="button" aria-label="Toe Hammock" data-cx="21.2" data-cy="84.7"/>
+    </svg>
+    <div class="exo-tip" role="status" aria-live="polite" hidden></div>
+  </div>
+  <div class="exo-panel">
+    <p class="eyebrow">Interactive</p>
+    <h3>Explore the device</h3>
+    <p class="exo-hint">Hover over a glowing part of the exoskeleton, or pick one below, to see how it’s built.</p>
+    <ul class="exo-legend"><li><button type="button" class="exo-key" data-part="cuff" style="--c:#2dd4bf"><span class="exo-dot"></span>Shank Cuff</button><template><strong style="--c:#2dd4bf">Shank Cuff</strong><p>Rigid 3D-printed shank pads bonded to EVA foam and wrapped in sweat-proof faux-leather vinyl. The pads spread strap pressure across the muscle bellies of the shin, so the cuff holds firm without pressure points.</p><ul class="exo-specs"><li>PLA pads, loaded in compression</li><li>EVA foam + vinyl</li><li>Hook-and-loop closure</li></ul></template></li><li><button type="button" class="exo-key" data-part="strut" style="--c:#60a5fa"><span class="exo-dot"></span>Shank Strut</button><template><strong style="--c:#60a5fa">Shank Strut</strong><p>A carbon fiber strut that runs down the leg from the shank cuff to the ankle, linking the cuff to the rest of the frame.</p><ul class="exo-specs"><li>Carbon fiber</li></ul></template></li><li><button type="button" class="exo-key" data-part="heel" style="--c:#f59e0b"><span class="exo-dot"></span>Heel Cuff</button><template><strong style="--c:#f59e0b">Heel Cuff</strong><p>A molded carbon fiber cuff that wraps the heel. Seven carbon plies are laid over a nylon insert, vacuum-bagged and cured, with separate left and right molds shaped around the ankle’s center of rotation.</p><ul class="exo-specs"><li>7 carbon plies + nylon insert</li><li>186 °C · 8 hr cure</li><li>Left &amp; right molds</li></ul></template></li><li><button type="button" class="exo-key" data-part="toe-strut" style="--c:#a78bfa"><span class="exo-dot"></span>Toe Strut</button><template><strong style="--c:#a78bfa">Toe Strut</strong><p>A carbon fiber strut that carries the frame forward along the side of the shoe toward the toe.</p><ul class="exo-specs"><li>Carbon fiber</li></ul></template></li><li><button type="button" class="exo-key" data-part="under-toe" style="--c:#f472b6"><span class="exo-dot"></span>Under-Toe Bar</button><template><strong style="--c:#f472b6">Under-Toe Bar</strong><p>A carbon fiber bar that runs beneath the front of the shoe.</p><ul class="exo-specs"><li>Carbon fiber</li></ul></template></li><li><button type="button" class="exo-key" data-part="hammock" style="--c:#34d399"><span class="exo-dot"></span>Toe Hammock</button><template><strong style="--c:#34d399">Toe Hammock</strong><p>A snowshoe-inspired fabric strap that cradles the front of the shoe and keeps the foot from sliding forward under load.</p><ul class="exo-specs"><li>Taslan + spandex</li></ul></template></li></ul>
+    <div class="exo-detail" aria-live="polite"><p class="exo-empty">Select a part to see its materials and design intent.</p></div>
+  </div>
+</div></section>
 <section class="row reveal"><div class="rt"><h2 class="ta-center">Thesis Project:</h2>
 <h2 class="ta-center"><em>Exploring the Mechanisms for Age-Related Increase in Walking Cost Using Ankle and Hip Exoskeletons</em></h2></div></section>
 <section class="row reveal"><figure class="media" style="max-width:943px"><img src="images/9a4f4b_21a5b2da2852432ba285c3c6d1c0bd5a.jpg" width="1280" height="720" alt="" loading="lazy" data-zoom></figure></section>
