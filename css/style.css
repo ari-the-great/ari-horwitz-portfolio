@@ -171,16 +171,16 @@ p { text-wrap: pretty; }
 .nav-toggle span { display: block; width: 16px; height: 2px; background: currentColor; border-radius: 2px; transition: transform .25s ease, opacity .2s ease; }
 
 /* ---------- home: hero ---------- */
-.hero { padding: clamp(44px, 7vw, 80px) var(--gutter) clamp(36px, 5vw, 56px); border-bottom: 1px solid var(--border); }
-.hero-inner { max-width: var(--max); margin: 0 auto; }
+.hero { padding: clamp(48px, 7vw, 88px) var(--gutter) clamp(44px, 6vw, 72px); border-bottom: 1px solid var(--border); }
+.hero-inner { max-width: 860px; margin: 0 auto; text-align: center; }
 .hero-title { font-size: clamp(3rem, 8.5vw, 6rem); font-weight: 500; letter-spacing: .005em; margin: 0 0 16px; line-height: 1; }
 .hero-blurb {
   font: 400 clamp(1.2rem, 2.2vw, 1.55rem)/1.45 var(--heading);
-  color: var(--text-soft); max-width: 700px; margin: 0 0 30px; letter-spacing: .01em;
+  color: var(--text-soft); max-width: 720px; margin: 0 auto 30px; letter-spacing: .01em;
 }
 .kw { font-weight: 500; }
 .kw-1 { color: var(--kw-1); } .kw-2 { color: var(--kw-2); } .kw-3 { color: var(--kw-3); } .kw-4 { color: var(--kw-4); }
-.hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.hero-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; }
 .btn-lg { padding: 13px 20px; font-size: 1rem; }
 
 /* ---------- home: sections ---------- */
