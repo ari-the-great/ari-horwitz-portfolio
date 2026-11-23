@@ -1,0 +1,100 @@
+#include <Servo.h>
+Servo servo1; 		//define all servos
+Servo servo2;
+Servo servo3;
+Servo servo4;
+Servo servo5;
+Servo servo6;
+
+int servo1Pin = 2;   // Pin connected to the each servo
+int servo2Pin = 3;  
+int servo3Pin = 4;
+int servo4Pin = 5;  
+int servo5Pin = 6;  
+int servo6Pin = 7;
+
+int pos1 = 130; 
+int cycles = 1;
+unsigned long half_cycle_time = 7500;
+unsigned long buffer = half_cycle_time / 10;
+
+  
+  
+Servo servoArray[6] = {servo1, servo2, servo3, servo4, servo5, servo6};
+Servo servoReverse[6] = {servo6, servo5, servo4, servo3, servo2, servo1};
+int num_of_servos = sizeof(servoArray)/sizeof(servoArray[0]); //stores the # of items in servoArray
+
+
+
+void setup() {
+  Serial.begin(9600);
+  servo1.attach(servo1Pin);             // Attaches the servos to their respective pins
+  servo2.attach(servo2Pin);			    
+  servo3.attach(servo3Pin);
+  servo4.attach(servo4Pin);
+  servo5.attach(servo5Pin);			    
+  servo6.attach(servo6Pin);
+  
+  
+  servo1.write(pos1);
+  servo2.write(pos1);
+  servo3.write(pos1);
+  servo4.write(pos1);
+  servo5.write(pos1);
+  servo6.write(pos1);
+  
+}
+
+
+void loop()
+{
+  delay (1000);
+  unsigned long zerostart = millis();  // accurate current time
+  
+  for(int i = cycles; i > 0; i--)
+  {
+    unsigned long fstart = millis();
+    for(int servox = 0; servox < num_of_servos; servox++)
+    { 
+      unsigned long onestart = millis();
+      while (onestart < fstart + servox * buffer * 2 + buffer)
+      {
+        servoArray[servox].write(180);
+        onestart = millis();
+      }
+      Serial.println("servo ");
+      Serial.println(servox);
+      Serial.println(millis());
+      while (onestart < fstart + servox * buffer * 2 + buffer + buffer)
+      {
+        servoArray[servox].write(130);
+        onestart = millis();
+      }
+      Serial.println("exit while 2");
+    }
+    Serial.print("end forward loop at ");
+    Serial.println(millis());
+    
+    unsigned long rstart = millis();
+    for(int servor = 0; servor < num_of_servos; servor++)
+    { 
+      unsigned long onestart = millis();
+      while (onestart < rstart + servor * buffer * 2 + buffer)
+      {
+        servoReverse[servor].write(180);
+        onestart = millis();
+      }
+      Serial.println("exit while 1rr");
+      while (onestart < rstart + servor * buffer * 2 + buffer + buffer)
+      {
+        servoReverse[servor].write(130);
+        onestart = millis();
+      }
+      Serial.println("exit while 2rr");
+    }
+    Serial.println("end for loop reverse");
+  }
+  
+  Serial.println("end for loop cycle");
+  delay(50000000);
+}

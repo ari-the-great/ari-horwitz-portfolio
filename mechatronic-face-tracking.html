@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mechatronic Face Tracking | Ari Horwitz</title>
+<meta name="description" content="Engineering portfolio of Ari Horwitz: biomechanics, mechatronics, 3D printing and human-centered design.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500&family=Nunito+Sans:wght@300;400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="page-mechatronic-face-tracking">
+<header class="site-header">
+  <a class="site-title" href="index.html">Engineering Portfolio: Ari Horwitz</a>
+  <nav class="nav" aria-label="Main">
+  <button class="nav-toggle" aria-expanded="false" aria-controls="nav-list">Menu</button>
+  <ul id="nav-list" class="nav-list">
+    <li><a href="index.html">Home</a></li>
+    <li class="has-sub is-current"><button class="sub-toggle" aria-expanded="false">Engineering Projects</button>
+      <ul class="sub"><li><a href="exoskeleton-sensor-suit.html">Exoskeleton Sensor Suit</a></li><li><a href="piv0t-ankle-brace.html">Ankle Brace (PIV0T)</a></li><li><a href="ankle-exoskeleton-thesis.html">Master&#x27;s Thesis Projects</a></li><li><a href="4-dof-robotic-arm.html">4 DOF Robotic Arm</a></li><li><a href="animatronic-eyeball.html">Animatronic Eyeball for ANIMAX</a></li><li><a href="rehabilitation-engineering.html">Rehabilitation Engineering</a></li><li><a href="mechatronic-face-tracking.html" aria-current="page">Mechatronic Face Tracking</a></li><li><a href="blind-ice-hockey-puck.html">Blind Ice Hockey Puck</a></li><li><a href="haptic-breathing-device-radial.html">Haptic Guided Breathing Device (Radial)</a></li><li><a href="syringe-pump.html">Syringe Pump</a></li><li><a href="dog-harness.html">Dog Harness (Tikkun Olam Makers)</a></li></ul></li>
+    <li class="has-sub"><button class="sub-toggle" aria-expanded="false">Older/Smaller Projects</button>
+      <ul class="sub"><li><a href="haptic-breathing-device-linear.html">Haptic Guided Breathing Device (Linear)</a></li><li><a href="concussion-monitoring-helmet.html">Concussion Monitoring Helmet</a></li><li><a href="3d-printed-padlock.html">3D Printed Padlock</a></li><li><a href="tpu-phone-case.html">TPU Phone Case</a></li><li><a href="stormwater-management.html">Stormwater Management</a></li><li><a href="assistive-dog-mobility-device.html">Assistive Dog Mobility Device</a></li></ul></li>
+    <li><a href="about.html">About</a></li>
+    <li class="nav-li"><a href="https://www.linkedin.com/in/ari-horwitz-752b51220/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true" width="18" height="18"><path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg></a></li>
+  </ul>
+</nav>
+</header>
+<main class="content">
+<section class="row"><div class="rt"><h1 class="ta-center">Mechatronic Tracking Camera</h1></div></section>
+<section class="row"><figure class="media" style="max-width:1280px"><img src="images/37410d_abca37f6b0464b97b23185b8483ec8cd.jpg" width="1200" height="1600" alt="" loading="lazy" data-zoom></figure><figure class="media" style="max-width:638px"><img src="images/37410d_9f53299b416a4d5e8f16a3908d2648ad.jpg" width="1600" height="1303" alt="" loading="lazy" data-zoom></figure><div class="rt"><h2 class="ta-center">What is it?</h2></div><div class="rt"><p>I designed and constructed a face-detecting and following camera system. It follows one person in the camera’s frame and continuously points the camera at their face to keep them centered. The camera is mounted directly on top of a servo motor which moves according to the data received by the camera sensor. There is also an ultrasonic range finder that detects subject distance and indicates via LEDs if the person is too far to be detected. All the components are housed in a compact, 3D-printed enclosure, which connects directly to a laptop to display what the camera sees.</p></div></section>
+<section class="row cols" style="--cols:390fr 639fr"><div class="col"><div class="rt"><h2 class="ta-center">Video Demonstration at Vanderbilt Engineering Showcase</h2></div></div><div class="col"><figure class="media video" style="max-width:639px"><video controls playsinline preload="metadata" poster="images/37410d_1af8847f56304c6cb51d0ca1002dc2a0f000.jpg"><source src="videos/37410d_1af8847f56304c6cb51d0ca1002dc2a0.mp4" type="video/mp4"></video></figure></div></section>
+<section class="row cols" style="--cols:600fr 780fr"><div class="col"><figure class="media" style="max-width:600px"><img src="images/37410d_142d83685ca64f8fb5ed0d65ff28e2ac.jpg" width="1461" height="492" alt="" loading="lazy" data-zoom></figure></div><div class="col"><div class="rt"><h2 class="ta-center">Smooth Motion</h2></div><div class="rt"><p>To allow the servo motor to move according to the subject and smoothly, I implemented thresholds for updating the coordinates of the face. This ensures that only movements exceeding a set x-position threshold are considered significant enough to tell the servo to update position.  The threshold variable determines the sensitivity of the motion detection, and the upper threshold helps to dampen any sudden large movements. By comparing the current face position to the last known position (last_x and last_y), the code can determine whether the movement is within the defined limits.</p></div></div></section>
+<section class="row cols" style="--cols:780fr 600fr"><div class="col"><div class="rt"><h2 class="ta-center">Pyton &lt;--&gt; Arduino</h2></div><div class="rt"><p>The “send_coords_to_arduino” function enables communication between the Python script and the Arduino sketch. After calculating the mirrored x-coordinate (flipped_x) to align with the servo's movement direction, the function formats the coordinates into a string and sends it over the serial connection to the Arduino.</p></div></div><div class="col"><figure class="media" style="max-width:600px"><img src="images/37410d_6e78e89373034d1c97ccc22a8b20210e.jpg" width="1230" height="605" alt="" loading="lazy" data-zoom></figure></div></section>
+</main>
+<footer class="site-footer">
+  <p class="footer-title">Ari Horwitz's Engineering Portfolio</p>
+  <p><a href="mailto:arihorwitz@gmail.com">arihorwitz@gmail.com</a></p>
+  <p><a href="tel:+13147377823">+1 (314) 737-7823</a></p>
+  <p><a class="footer-li" href="https://www.linkedin.com/in/ari-horwitz-752b51220/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true" width="18" height="18"><path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg></a></p>
+</footer>
+<script src="js/main.js"></script>
+</body>
+</html>

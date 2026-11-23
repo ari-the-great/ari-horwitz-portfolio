@@ -1,0 +1,289 @@
+//Libraries
+#include <Servo.h>
+
+//Objects
+Servo mainServo;
+
+//User Modified Variables
+int const startingDeg = 160;   //Change this based off servoTesting
+int const endingDeg = 6;       //Change this based off servoTesting
+int const expandTime = 5000;   //(milliseconds) expanding cycle time
+int const retractTime = 5000;  //(milliseconds) retracting cycle time
+
+//Constants
+int const degRange = startingDeg - endingDeg;
+float const expandStepTime = expandTime / degRange;    //(milliseconds/degree)
+float const retractStepTime = retractTime / degRange;  //(milliseconds/degree)
+int const degQuartile = degRange / 4;
+int const degTermList100[4] = { endingDeg + degQuartile * 2, endingDeg + degQuartile * 1, startingDeg, endingDeg + degQuartile * 3 };  //from 100% to {50% 75% 0% 25%}
+int const degTermList50[4] = { endingDeg + degQuartile * 1, startingDeg, endingDeg, endingDeg + degQuartile * 3 };                     //from 50% to {75% 0% 100% 25%}
+
+//Numeric Variables
+int servoAngle;
+int stepCount;
+int runTime;
+unsigned long startMillis;
+unsigned long oldMillis;  //currently not used but could be helful later
+unsigned long currentMillis;
+unsigned long endMillis;
+unsigned long fullCyclesStartMillis;
+unsigned long fullCyclesEndMillis;
+
+//Boolean variables
+boolean readyToContinue;
+boolean readyToContinueToNext;
+
+//Functions
+void GetApproval() {
+  readyToContinue = false;
+  Serial.println("Are you ready to continue?");
+  while (readyToContinue == false) {
+    if (Serial.readString() == "y") {
+      readyToContinue = true;
+      
+    }
+  }
+}
+
+void continueToNext() {
+  boolean questionAnswered = false;
+  Serial.println("Are you ready to continue to next part?");
+  while (questionAnswered == false) {
+    if (Serial.available() > 0) {
+      if (Serial.readString() == "y") {
+        readyToContinueToNext = true;
+        questionAnswered = true;
+      } else {
+        readyToContinueToNext = false;
+        questionAnswered = true;
+      }
+    }
+  }
+}
+
+void expand(int currentDeg, int desiredDeg) {
+  stepCount = 0;
+  startMillis = millis();
+  while (stepCount <= currentDeg - desiredDeg) {
+    currentMillis = millis();
+    if ((currentMillis - startMillis) - (stepCount * expandStepTime) >= expandStepTime) {
+      servoAngle = currentDeg - stepCount;
+      mainServo.write(servoAngle);
+      Serial.println(servoAngle);  //remove
+      stepCount = stepCount + 1;
+    }
+  }
+}
+
+void retract(int currentDeg, int desiredDeg) {
+  stepCount = 0;
+  startMillis = millis();
+  while (stepCount <= desiredDeg - currentDeg) {
+    currentMillis = millis();
+    if ((currentMillis - startMillis) - (stepCount * retractStepTime) >= retractStepTime) {
+      servoAngle = currentDeg + stepCount;
+      mainServo.write(servoAngle);
+      Serial.println(servoAngle);  //remove
+      stepCount = stepCount + 1;
+    }
+  }
+}
+
+
+void corretTime(int time) {
+  endMillis = millis();
+  runTime = endMillis - startMillis;
+  if (time - (runTime) > 0) {
+    delay(time - (runTime));
+  }
+}
+
+
+//Setup
+void setup() {
+  //servo adjustment
+  Serial.begin(9600);
+  mainServo.attach(3);           //attaches the servo on pin 9 to servo object (mainServo)
+  mainServo.write(startingDeg);  //move servo to starting position
+  delay(100);                    //allow servo to reach position
+  servoAngle = startingDeg;      //set servo angle variable to the starting degree point
+}
+
+//Main Loop
+void loop() {
+  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  //TRAINING PART 1: Ending and Beginning Stimulli
+  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  readyToContinueToNext = false;
+  while (readyToContinueToNext == false) {
+    Serial.println("Training Session with ending and beginning stimulli will now start");
+
+    //Beginning to Ending Stimmuli
+
+    //-------------------------------------------
+    Serial.println("Ending stimulli will start");
+    GetApproval();
+    Serial.println("Ending Stimulli has started");
+    //--------------------------------------------
+    //Expand Full
+    expand(startingDeg, endingDeg);
+    //Expand Time Correction
+    corretTime(expandTime);
+    //----------------------------------------------
+    Serial.println("Ending stimulli has completed");
+    //----------------------------------------------
+
+    //Ending to Beginning Stimmuli
+
+    //----------------------------------------------
+    Serial.println("Beginning stimulli will start");
+    GetApproval();
+    Serial.println("Beginning Stimulli has started");
+    //-----------------------------------------------
+    //Retract Full
+    retract(endingDeg, startingDeg);
+    //Retract Time Correction
+    corretTime(retractTime);
+    //--------------------------------------------------
+    Serial.println("Beginning stimulli has completed");
+    //-------------------------------------------------
+    continueToNext();
+  }
+
+  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  //TRAINING PART 2: 3 Full Cycles with Visual Aid
+  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  readyToContinueToNext = false;
+  while (readyToContinueToNext == false) {
+    Serial.println("Training Session with 3 full cycles (visual aid) will now Start");
+
+    //3 Full Cycles
+
+    //-------------------------------------------
+    Serial.println("3 Cycles will Start");
+    GetApproval();
+    Serial.println("3 Cycles has started");
+    delay(500);  //for timing with visual aid, click play when you see the first message pop after the GetApproval call above
+    //--------------------------------------------
+    fullCyclesStartMillis = millis();
+    for (int cycleNum = 1; cycleNum <= 3; cycleNum++) {  //Cycle Number Loop
+      //--------------------------------------------
+      Serial.print("Cycle number ");
+      Serial.print(cycleNum);
+      Serial.println(" has started");
+      //--------------------------------------------
+      //Expand Full
+      expand(startingDeg, endingDeg);
+      //Expand Time Correction
+      corretTime(expandTime);
+      //Retract
+      retract(endingDeg, startingDeg);
+      //Retract Time Correction
+      corretTime(retractTime);
+      //--------------------------------------------
+      Serial.print("Cycle number ");
+      Serial.print(cycleNum);
+      Serial.println(" has completed");
+      //--------------------------------------------
+    }
+    fullCyclesEndMillis = millis();
+    //--------------------------------------------
+    Serial.println("3 Cycles has completed");
+    Serial.print("Total Full Cycles Time:");
+    Serial.println(fullCyclesEndMillis - fullCyclesStartMillis);
+    //--------------------------------------------
+    continueToNext();
+  }
+
+  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  //TRAILS PART 1: 0 to 100 to __
+  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  Serial.println("Trails from 100 to __ will now Start");
+  for (int i = 0; i <= 3; i++) {
+    readyToContinueToNext = false;
+    while (readyToContinueToNext == false) {
+      //------------------------------------------
+      Serial.print("Trail number ");
+      Serial.print(i + 1);
+      Serial.println(" will start");
+      GetApproval();
+      Serial.println("Trial has started");
+      //------------------------------------------
+      //Expand Full
+      expand(startingDeg, endingDeg);
+      //Expand Time Correction
+      corretTime(expandTime);
+      //Retract to __ value
+      retract(endingDeg, degTermList100[i]);
+      //------------------------------------------
+      Serial.print("Trail number ");
+      Serial.print(i + 1);
+      Serial.println(" has completed");
+      Serial.println("Tactor will return to 0%");
+      GetApproval();
+      //------------------------------------------
+      //Retract back to 0%
+      retract(degTermList100[i], startingDeg);
+      mainServo.write(startingDeg);  //manually go to starting degree in case of truncation error above
+      //------------------------------------------
+      Serial.println("Tactor has returned to 0%");
+      //------------------------------------------
+      continueToNext();
+    }
+  }
+
+  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  //TRAILS PART 2: 50 to _
+  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  //----------------------------------------------
+  Serial.println("Trails from 50 to __ will now Start");
+  Serial.println("Tactor will move to 50%");
+  GetApproval();
+  //----------------------------------------------
+  expand(startingDeg, endingDeg + 2 * degQuartile);  //move to 50%
+  //----------------------------------------------
+  Serial.println("Tactor is at 50%");
+  //----------------------------------------------
+  for (int i = 0; i <= 3; i++) {
+    readyToContinueToNext = false;
+    while (readyToContinueToNext == false) {
+      //------------------------------------------
+      Serial.print("Trail number ");
+      Serial.print(i + 1);
+      Serial.println(" will start");
+      GetApproval();
+      Serial.println("Trial has started");
+      //------------------------------------------
+      if (degTermList50[i] > endingDeg + 2 * degQuartile) {  //Going from 50% to less than 50% so we need to retract to get there
+        retract(endingDeg + 2 * degQuartile, degTermList50[i]);
+      }
+      if (degTermList50[i] < endingDeg + 2 * degQuartile) {  //Going from 50% to greater than 50% so we need to expand to get there
+        expand(endingDeg + 2 * degQuartile, degTermList50[i]);
+      }
+      //------------------------------------------
+      Serial.print("Trail number ");
+      Serial.print(i + 1);
+      Serial.println(" has completed");
+      Serial.println("Tactor will return to 50%");
+      GetApproval();
+      //------------------------------------------
+      //Expand or Retract back to 50%
+      if (degTermList50[i] > endingDeg + 2 * degQuartile) {  //We are less than 50% going to 50% so expand
+        expand(degTermList50[i], endingDeg + 2 * degQuartile);
+      }
+      if (degTermList50[i] < endingDeg + 2 * degQuartile) {  //We are greater than 50% going to 50% so retract
+        retract(degTermList50[i], endingDeg + 2 * degQuartile);
+      }
+      mainServo.write(endingDeg + 2 * degQuartile);  //move back to 50% in case of truncation error from above
+      //------------------------------------------
+      Serial.println("Tactor has returned to 50%"); 
+      //------------------------------------------
+      continueToNext();
+    }
+  }
+  Serial.println("Tactor will return to 0%");
+  retract(degTermList50[3], startingDeg);
+  Serial.println("Tactor has returned to 0% ");
+  Serial.println("Program will now restart");
+  GetApproval();
+}

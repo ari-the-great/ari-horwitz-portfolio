@@ -1,0 +1,222 @@
+/* Ari Horwitz Portfolio — styles.
+   Colors and fonts live in :root so they're easy to change. */
+:root {
+  --teal: #2b7a6a;
+  --teal-dark: #1f5c50;
+  --teal-band: #66a79a;
+  --text: #3d7b70;
+  --muted: #6c8f88;
+  --bg: #ffffff;
+  --bg-soft: #ececec;
+  --line: #2b7a6a;
+  --heading-font: "Oswald", "Arial Narrow", sans-serif;
+  --body-font: "Nunito Sans", "Avenir", "Segoe UI", sans-serif;
+  --max: 1100px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--body-font);
+  font-weight: 300;
+  font-size: 17px;
+  line-height: 1.6;
+}
+img, video { max-width: 100%; height: auto; display: block; }
+a { color: var(--teal); }
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--heading-font);
+  color: var(--teal);
+  font-weight: 500;
+  line-height: 1.15;
+  margin: 0 0 .4em;
+}
+h1 { font-size: clamp(2.2rem, 5vw, 3.4rem); }
+h2 { font-size: clamp(1.6rem, 3.4vw, 2.2rem); }
+h3 { font-size: 1.5rem; }
+h4, h5 { font-size: 1.3rem; }
+h6 { font-size: 1.15rem; }
+.ta-center { text-align: center; }
+.ta-right { text-align: right; }
+
+/* ---------- header ---------- */
+.site-header {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 48px 16px 0;
+  text-align: center;
+}
+.site-title {
+  display: inline-block;
+  font-family: var(--heading-font);
+  font-weight: 500;
+  font-size: clamp(2rem, 6vw, 4.4rem);
+  line-height: 1.1;
+  color: var(--teal);
+  text-decoration: none;
+  padding-bottom: 20px;
+}
+.nav { border-top: 1px solid var(--line); padding: 12px 0; position: relative; }
+.nav-list { list-style: none; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; }
+.nav-list > li { position: relative; }
+.nav-list > li + li:not(.nav-li) { border-left: 1px solid var(--line); }
+.nav-list > li > a, .sub-toggle {
+  display: block;
+  padding: 2px 16px;
+  font: 400 1.35rem var(--body-font);
+  color: var(--teal);
+  text-decoration: none;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.nav-list > li > a[aria-current], .is-current > .sub-toggle { color: #8fbdb3; }
+.nav-list > li > a:hover, .sub-toggle:hover { color: var(--teal-dark); }
+.nav-li { position: absolute !important; right: 0; top: 50%; transform: translateY(-50%); }
+.nav-li a { color: #111 !important; padding: 4px !important; }
+.sub {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 20;
+  min-width: 280px;
+  list-style: none;
+  margin: 0;
+  padding: 6px 0;
+  background: #fff;
+  border: 1px solid #d5e5e1;
+  box-shadow: 0 8px 24px rgba(0,0,0,.08);
+  text-align: left;
+}
+.sub a { display: block; padding: 8px 18px; color: var(--teal); text-decoration: none; font-size: 1rem; }
+.sub a:hover, .sub a[aria-current] { background: #eef6f4; }
+.has-sub:hover .sub, .has-sub.open .sub { display: block; }
+.nav-toggle { display: none; }
+
+/* ---------- content rows (rebuilt from the Wix layout) ---------- */
+.content { max-width: var(--max); margin: 0 auto; padding: 40px 16px 64px; }
+.row { margin: 0 auto 48px; }
+.row > * + * { margin-top: 20px; }
+.row.cols {
+  display: grid;
+  grid-template-columns: var(--cols);
+  gap: 48px;
+  align-items: center;
+}
+.row.cols > * + * { margin-top: 0; }
+.col > * + * { margin-top: 20px; }
+.rt p { margin: 0 0 .4em; }
+.rt p.spacer { margin: 0; height: .5em; }
+.rt ul, .rt ol { margin: 0 0 .4em; padding-left: 1.3em; }
+.rt li p { margin: 0; }
+.rt li::marker { color: var(--teal); }
+
+figure { margin: 0 auto; }
+.media img, .media video { width: 100%; }
+.media.icon { display: inline-block; margin: 0; }
+.media.video video { background: #000; }
+img[data-zoom] { cursor: zoom-in; }
+
+.btn-wrap { text-align: center; margin: 0; }
+.btn {
+  display: inline-block;
+  padding: 12px 28px;
+  border: 2px solid var(--teal);
+  color: var(--teal);
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: .04em;
+}
+.btn:hover { background: var(--teal); color: #fff; }
+
+.embed { position: relative; aspect-ratio: 16 / 9; max-width: 760px; margin: 0 auto; }
+.embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+/* gallery grid (About, Skills) */
+.gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+.gallery figure { margin: 0; }
+.gallery img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.gallery figcaption { padding: 8px 2px 0; font-size: .95rem; }
+.gallery figcaption strong { display: block; font-family: var(--heading-font); font-weight: 500; color: var(--teal); font-size: 1.15rem; }
+
+/* slideshow */
+.slideshow { position: relative; margin: 0 auto; overflow: hidden; background: #f4f4f4; }
+.slides { display: flex; transition: transform .45s ease; }
+.slide { flex: 0 0 100%; display: flex; align-items: center; justify-content: center; }
+.slide img { width: 100%; max-height: 520px; object-fit: contain; }
+.ss-prev, .ss-next {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 40px; height: 40px; border: 0; border-radius: 50%;
+  background: rgba(255,255,255,.8); color: #222; font-size: 28px; line-height: 1; cursor: pointer;
+}
+.ss-prev { left: 10px; } .ss-next { right: 10px; }
+.ss-dots { position: absolute; bottom: 10px; left: 0; right: 0; display: flex; justify-content: center; gap: 8px; }
+.ss-dots button { width: 9px; height: 9px; padding: 0; border-radius: 50%; border: 1px solid #fff; background: transparent; cursor: pointer; }
+.ss-dots button[aria-current="true"] { background: #fff; }
+
+/* ---------- homepage ---------- */
+.intro { max-width: 880px; margin: 0 auto 56px; text-align: center; }
+.intro p { font-family: var(--heading-font); font-size: clamp(1.25rem, 2.6vw, 1.75rem); color: #6f6f6f; line-height: 1.3; }
+.intro strong { font-weight: 500; }
+.intro strong:nth-of-type(1) { color: #c9c42c; }
+.intro strong:nth-of-type(2) { color: #5a4a80; }
+.intro strong:nth-of-type(3) { color: #1f5c50; }
+.intro strong:nth-of-type(4) { color: #3d8fd6; }
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+.card { position: relative; display: block; aspect-ratio: 363 / 283; overflow: hidden; background: #f2f2f2; color: #fff; text-decoration: none; }
+.card img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; }
+.card-title {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  padding: 16px; text-align: center;
+  font-family: var(--heading-font); font-size: 1.6rem; line-height: 1.2;
+  background: rgba(31, 92, 80, .72); opacity: 0; transition: opacity .3s ease;
+}
+.card:hover .card-title, .card:focus-visible .card-title { opacity: 1; }
+.card:hover img { transform: scale(1.04); }
+.cta { display: grid; grid-template-columns: 1fr 1fr; margin: 96px calc(50% - 50vw) -64px; }
+.cta-box {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px;
+  min-height: 270px; padding: 32px 16px; text-decoration: none; text-align: center;
+  font-family: "Arial Black", var(--body-font); font-weight: 900; text-transform: uppercase; letter-spacing: .22em; font-size: 1.05rem;
+}
+.cta-resume { background: var(--bg-soft); color: #5c9a8e; }
+.cta-resume svg { color: #111; }
+.cta-linkedin { background: var(--teal-band); color: #fff; }
+
+/* ---------- footer ---------- */
+.site-footer { text-align: center; padding: 40px 16px 56px; font-size: .95rem; }
+.site-footer p { margin: 4px 0; }
+.site-footer a { color: var(--text); text-decoration: none; }
+.footer-title { font-family: var(--heading-font); font-size: 1.4rem; color: var(--teal); margin-bottom: 10px !important; }
+.footer-li { color: #111 !important; display: inline-block; margin-top: 16px; }
+
+/* ---------- lightbox ---------- */
+.lightbox { position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,.88); display: flex; align-items: center; justify-content: center; padding: 24px; cursor: zoom-out; }
+.lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+/* ---------- phones / tablets ---------- */
+@media (max-width: 800px) {
+  .row.cols { grid-template-columns: 1fr; gap: 24px; }
+  .cards { grid-template-columns: 1fr 1fr; }
+  .card-title { opacity: 1; inset: auto 0 0 0; font-size: 1.1rem; padding: 8px; }
+  .cta { grid-template-columns: 1fr; }
+  .nav-toggle {
+    display: inline-block; padding: 6px 18px; border: 1px solid var(--line); background: none;
+    color: var(--teal); font: 400 1.1rem var(--body-font); cursor: pointer;
+  }
+  .nav-list { display: none; flex-direction: column; align-items: stretch; margin-top: 10px; }
+  .nav.open .nav-list { display: flex; }
+  .nav-list > li + li:not(.nav-li) { border-left: 0; border-top: 1px solid #d5e5e1; }
+  .nav-list > li > a, .sub-toggle { width: 100%; padding: 10px; }
+  .nav-li { position: static !important; transform: none; display: flex; justify-content: center; padding: 8px; }
+  .sub { position: static; box-shadow: none; border: 0; min-width: 0; text-align: center; background: #f6faf9; }
+  .has-sub:hover .sub { display: none; }
+  .has-sub.open .sub { display: block; }
+}
+@media (max-width: 480px) {
+  .cards { grid-template-columns: 1fr; }
+}
