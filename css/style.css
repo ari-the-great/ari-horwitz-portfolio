@@ -368,7 +368,12 @@ img[data-zoom]:hover { transform: scale(1.01); }
 .exo-figure { position: relative; border-radius: 20px; background: linear-gradient(160deg, #f3f7f6, #e6efec); padding: 20px; box-shadow: var(--shadow); }
 :root[data-theme="dark"] .exo-figure { background: linear-gradient(160deg, #3c3d42, #333439); }
 .exo-figure img { width: 100%; }
-.exo-svg { position: absolute; left: 20px; top: 20px; width: calc(100% - 40px); height: calc(100% - 40px); overflow: visible; }
+.exo-svg {
+  /* the drawing area extends 10% past the photo on every side so glows near the edges aren't clipped */
+  position: absolute; overflow: visible;
+  left: calc(20px - (100% - 40px) * .1); top: calc(20px - (100% - 40px) * .1);
+  width: calc((100% - 40px) * 1.2); height: calc((100% - 40px) * 1.2);
+}
 .exo-part { cursor: pointer; outline: none; }
 .exo-hit { fill: transparent; stroke: none; }
 .exo-glow {
@@ -423,6 +428,10 @@ img[data-zoom]:hover { transform: scale(1.01); }
 .cv h4 a:hover { color: var(--accent); }
 .cv p { margin: 0; color: var(--text-soft); }
 .cv-edu { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 40px; }
+.cv-school { display: flex; align-items: center; gap: 18px; }
+.cv-logo { flex: none; width: auto; height: 46px; max-width: 104px; object-fit: contain; opacity: .7; transition: opacity .3s ease; }
+.cv-school:hover .cv-logo { opacity: 1; }
+:root[data-theme="dark"] .cv-logo { opacity: .6; }
 .cv-meta { font-size: .9rem; color: var(--muted) !important; margin-top: 2px !important; }
 .cv-entry { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 8px 32px; padding: 14px 0; }
 .cv-entry + .cv-entry { border-top: 1px dashed var(--border); }

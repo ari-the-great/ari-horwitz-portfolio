@@ -245,8 +245,9 @@
       tip.hidden = false;
       // position the card next to the part, inside the photo
       var box = svg.getBoundingClientRect(), fbox = fig.getBoundingClientRect();
-      var x = box.left - fbox.left + box.width * parseFloat(p.dataset.cx) / 100;
-      var y = box.top - fbox.top + box.height * parseFloat(p.dataset.cy) / 100;
+      var vb = svg.viewBox.baseVal;
+      var x = box.left - fbox.left + box.width * (parseFloat(p.dataset.cx) - vb.x) / vb.width;
+      var y = box.top - fbox.top + box.height * (parseFloat(p.dataset.cy) - vb.y) / vb.height;
       var half = Math.min(tip.offsetWidth / 2, fbox.width * 0.45);
       x = Math.max(half + 8, Math.min(fbox.width - half - 8, x));
       tip.style.left = x + 'px';
