@@ -229,12 +229,26 @@
     var parts = exo.querySelectorAll('.exo-part');
     var keys = exo.querySelectorAll('.exo-key');
     var pinned = null;
+    var hideTimer = null;
 
+    // Reserve room for the longest description so the panel never changes height
+    // (a changing height made the buttons shift under the mouse and flicker).
+    function lockDetailHeight() {
+      detail.style.minHeight = '';
+      var tallest = detail.offsetHeight;
+      keys.forEach(function (k) {
+        detail.innerHTML = content(k.dataset.part);
+        tallest = Math.max(tallest, detail.offsetHeight);
+      });
+      detail.innerHTML = emptyDetail;
+      detail.style.minHeight = tallest + 'px';
+    }
     function content(key) {
       var k = exo.querySelector('.exo-key[data-part="' + key + '"]');
       return k ? k.parentElement.querySelector('template').innerHTML : '';
     }
     function show(key) {
+      clearTimeout(hideTimer);
       exo.classList.add('has-active');
       parts.forEach(function (p) { p.classList.toggle('is-active', p.dataset.part === key); });
       keys.forEach(function (k) { k.classList.toggle('is-active', k.dataset.part === key); });
@@ -262,19 +276,31 @@
       tip.hidden = true;
       detail.innerHTML = emptyDetail;
     }
+    // wait a moment before clearing, so moving between neighbouring parts or buttons doesn't blink
+    function scheduleHide() {
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(hide, 220);
+    }
+    lockDetailHeight();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (!exo.classList.contains('has-active')) lockDetailHeight(); });
+    var resizeTimer;
+    window.addEventListener('resize', function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function () { if (!exo.classList.contains('has-active')) lockDetailHeight(); }, 200);
+    });
     parts.forEach(function (p) {
       p.addEventListener('mouseenter', function () { show(p.dataset.part); });
-      p.addEventListener('mouseleave', hide);
+      p.addEventListener('mouseleave', scheduleHide);
       p.addEventListener('focus', function () { show(p.dataset.part); });
-      p.addEventListener('blur', hide);
+      p.addEventListener('blur', scheduleHide);
       p.addEventListener('click', function (e) { e.stopPropagation(); pinned = pinned === p.dataset.part ? null : p.dataset.part; pinned ? show(pinned) : hide(); });
       p.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); p.dispatchEvent(new Event('click')); } });
     });
     keys.forEach(function (k) {
       k.addEventListener('mouseenter', function () { show(k.dataset.part); });
-      k.addEventListener('mouseleave', hide);
+      k.addEventListener('mouseleave', scheduleHide);
       k.addEventListener('focus', function () { show(k.dataset.part); });
-      k.addEventListener('blur', hide);
+      k.addEventListener('blur', scheduleHide);
       k.addEventListener('click', function (e) { e.stopPropagation(); pinned = pinned === k.dataset.part ? null : k.dataset.part; pinned ? show(pinned) : hide(); });
     });
     document.addEventListener('click', function (e) { if (pinned && !e.target.closest('.exo')) { pinned = null; hide(); } });

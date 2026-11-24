@@ -364,7 +364,7 @@ img[data-zoom]:hover { transform: scale(1.01); }
 .ss-dots button[aria-current="true"] { width: 22px; background: var(--accent); }
 
 /* interactive exoskeleton */
-.exo { display: grid; grid-template-columns: minmax(0, 440px) minmax(0, 1fr); gap: clamp(28px, 5vw, 64px); align-items: center; max-width: 1000px; margin: 0 auto; }
+.exo { display: grid; grid-template-columns: minmax(0, 440px) minmax(0, 1fr); gap: clamp(28px, 5vw, 64px); align-items: start; max-width: 1000px; margin: 0 auto; }
 .exo-figure { position: relative; border-radius: 20px; background: linear-gradient(160deg, #f3f7f6, #e6efec); padding: 20px; box-shadow: var(--shadow); }
 :root[data-theme="dark"] .exo-figure { background: linear-gradient(160deg, #3c3d42, #333439); }
 .exo-figure img { width: 100%; }
@@ -375,7 +375,7 @@ img[data-zoom]:hover { transform: scale(1.01); }
   width: calc((100% - 40px) * 1.2); height: calc((100% - 40px) * 1.2);
 }
 .exo-part { cursor: pointer; outline: none; }
-.exo-hit { fill: transparent; stroke: none; }
+.exo-hit { fill: transparent; stroke: transparent; stroke-width: 12px; vector-effect: non-scaling-stroke; stroke-linejoin: round; pointer-events: all; }
 .exo-glow {
   fill: var(--c); stroke: none; opacity: .1;
   filter: url(#exo-glow); mix-blend-mode: screen;
@@ -396,7 +396,7 @@ img[data-zoom]:hover { transform: scale(1.01); }
 .exo-tip strong { display: flex; align-items: center; gap: 8px; font: 500 1.05rem/1.2 var(--heading); color: var(--text); }
 .exo-tip strong::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--c); box-shadow: 0 0 10px var(--c); }
 .exo-detail {
-  margin-top: 16px; min-height: 172px; padding: 18px 20px; border-radius: 14px;
+  margin-top: 16px; padding: 18px 20px; border-radius: 14px;
   background: var(--bg-alt); border: 1px solid var(--border);
 }
 .exo-detail strong { display: flex; align-items: center; gap: 8px; font: 500 1.3rem/1.2 var(--heading); color: var(--text); margin-bottom: 8px; }
@@ -405,6 +405,7 @@ img[data-zoom]:hover { transform: scale(1.01); }
 .exo-detail .exo-empty { margin: 0; color: var(--muted); font-style: italic; }
 .exo-specs { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
 .exo-specs li { padding: 4px 9px; border-radius: 6px; background: var(--accent-soft); color: var(--accent); font-size: .76rem; font-weight: 600; }
+.exo-panel { padding-top: clamp(0px, 4vw, 40px); }
 .exo-panel h3 { font-size: clamp(1.6rem, 3vw, 2.1rem); }
 .exo-hint { color: var(--text-soft); margin: 0 0 20px; }
 .exo-legend { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
